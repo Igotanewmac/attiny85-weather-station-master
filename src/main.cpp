@@ -2,16 +2,21 @@
 
 // wire master library for the USI hardware
 #include <TinyWireM.h>
+// Utility definition for TinyWireM
 #define wire TinyWireM
 
 
 
 // the actual bus id's
+// sensors are on bus 0x00
 #define I2CBUSIDSENSORS 0x00
+// eeprom storage is on bus 0x00
 #define I2CBUSIDSTORAGE 0x01
 
 // led pin(s)!
+// Pin of red output LED
 #define LED_RED 3
+// Pin of yellow output LED
 #define LED_YEL 4
 
 // i2c side io pin
@@ -26,30 +31,17 @@
 // global 32 byte data ram cache
 uint8_t globalcache[32] = { 0 };
 
-// declare some variables to reuse
+// global 32bit variable
 uint32_t myuint32 = 0;
+
+// global 16 bit variable
 uint16_t myuint16 = 0;
 
-// bus switcher
+// bus switcher current bus id
 uint8_t currentbusid = 0x00;
 
 
-
-// FRAM addresses
-#define I2CADDRESSFRAMBUS 0x00
-#define I2CADDRESSFRAM0 0x50
-#define I2CADDRESSFRAM1 0x51
-
-uint8_t framworkmemory = I2CADDRESSFRAM0;
-uint8_t framdatamemory = I2CADDRESSFRAM1;
-
-
-
-
-
-// switch to a new i2c bus.
-// busid is an int from 0 to 7 that corresponds to the on-chip bus ids.
-
+// the address of the i2c bus switcher
 #define I2CADDRESSBUSMASTER 0x70
 
 
@@ -61,7 +53,7 @@ uint8_t framdatamemory = I2CADDRESSFRAM1;
 
 
 // function declarations
-void i2cswitchbus();
+void i2cswitchbus( uint8_t newbusid );
 void i2cbuson();
 void i2cbusoff();
 
@@ -87,7 +79,7 @@ void i2cbusoff();
 void setup() {
   // put your setup code here, to run once:
 
-  // set an output
+  // set up outputs
   pinMode( LED_RED , OUTPUT );
   pinMode( LED_YEL , OUTPUT );
   digitalWrite( LED_RED , LOW );
@@ -108,6 +100,14 @@ void setup() {
 
 
 
+
+
+
+
+
+
+
+
 void loop() {
   // put your main code here, to run repeatedly:
 
@@ -120,10 +120,61 @@ void loop() {
 
   // now turn off our alarm
 
+  // switch to sensor bus
+  i2cbuson();
+
+  // switch to the sensor bus
+  i2cswitchbus( I2CBUSIDSENSORS );
+
+  // do something here
+
+  // creat a control byte variable to hold 8 bits.
+  uint8_t controlbyte = 0;
+
+  // read our control byte from the chip
+  wire.beginTransmission( 0x68 );
+  wire.send( 0x0F );
+  wire.endTransmission();
+  wire.requestFrom( 0x68 , 1 );
+  controlbyte = wire.receive();
+
+  digitalWrite( LED_YEL , HIGH );
+
+  // update it
+  controlbyte &= 0b11111100;
+
+  // and now write it back...
+  wire.beginTransmission( 0x68 );
+  wire.send( 0x0F );
+  wire.send( controlbyte );
+  wire.endTransmission();
+  
+  digitalWrite( LED_RED , LOW );
+
+  // now turn off the i2c bus
+  i2cbusoff();
 
 
+  // now write the LED pin low
+  digitalWrite( LED_RED , LOW );
+  digitalWrite( LED_YEL , LOW );
+
+  // all done, return.
+  return;
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
