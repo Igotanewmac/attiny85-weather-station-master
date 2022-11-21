@@ -8,6 +8,7 @@
 #define tw TinyWireM
 #endif
 
+
 #define DS1307ADDRESS 0x68
 
 
@@ -228,6 +229,43 @@ void setonesecondalarm() {
     tw.send( controlregister );
     tw.end();
 }
+
+
+
+
+
+
+
+
+
+
+
+void clearalarms() {
+
+
+  // creat a control byte variable to hold 8 bits.
+  uint8_t controlbyte = 0;
+
+  // read our control byte from the chip
+  tw.beginTransmission( DS1307ADDRESS );
+  tw.endTransmission();
+  tw.requestFrom( DS1307ADDRESS , 1 );
+  controlbyte = tw.receive();
+
+  // update it
+  controlbyte &= 0b11111100;
+
+  // and now write it back...
+  tw.beginTransmission( DS1307ADDRESS );
+  tw.send( 0x0F );
+  tw.send( controlbyte );
+  tw.endTransmission();
+
+}
+
+
+
+
 
 
 

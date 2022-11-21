@@ -2,10 +2,18 @@
 
 // wire master library for the USI hardware
 #include <TinyWireM.h>
+
+
+// ds3231 library for clock functions
+#include "DS3231.h"
+
+
+
+
+
+
 // Utility definition for TinyWireM
 #define wire TinyWireM
-
-
 
 // the actual bus id's
 // sensors are on bus 0x00
@@ -127,30 +135,8 @@ void loop() {
   i2cswitchbus( I2CBUSIDSENSORS );
 
   // do something here
-
-  // creat a control byte variable to hold 8 bits.
-  uint8_t controlbyte = 0;
-
-  // read our control byte from the chip
-  wire.beginTransmission( 0x68 );
-  wire.send( 0x0F );
-  wire.endTransmission();
-  wire.requestFrom( 0x68 , 1 );
-  controlbyte = wire.receive();
-
-  digitalWrite( LED_YEL , HIGH );
-
-  // update it
-  controlbyte &= 0b11111100;
-
-  // and now write it back...
-  wire.beginTransmission( 0x68 );
-  wire.send( 0x0F );
-  wire.send( controlbyte );
-  wire.endTransmission();
+  clearalarms();
   
-  digitalWrite( LED_RED , LOW );
-
   // now turn off the i2c bus
   i2cbusoff();
 
