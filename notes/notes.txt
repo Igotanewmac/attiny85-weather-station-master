@@ -1,0 +1,74 @@
+
+
+I need to...
+
+1. set the ALM1 flags to go off every second.
+
+2. clear the alarm flag on startup.
+
+
+
+
+
+So, in theory....
+
+I can set ALM! for each second and ALM2 for each minute, by writing all zeros to their locations.
+
+
+The alarm interrupt flag is enabled by default on power up.
+
+have to switch the alarm enable bit to zero to enable the alarm.  this bit is set to zero when power is applied.
+
+does "when power is applied" include the battery?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
