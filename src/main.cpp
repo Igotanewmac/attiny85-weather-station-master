@@ -50,6 +50,10 @@ tinyBMP085 mybmp085;
 
 
 
+
+
+
+
 // globals
 
 // global 32 byte data ram cache
@@ -74,8 +78,71 @@ uint16_t myuint16 = 0;
 
 
 /// @brief Read the sensor data, prepare it, then store it to fram.
-/// @return returns the datamemorycursor.
-uint16_t doSensorReadAndStore();
+/// @return returns true if fram full.
+uint8_t dosensorreadandstore() {
+
+  // read sensors into ram buffer
+
+  // fetch the current time as an epoch from 00-01-01-00-00-00 ( year 2000, first of january , midnight.)
+  myuint32 = getTimeAndDate();
+
+  // put this value into the cache
+  globalcache[0] = (uint8_t)( ( myuint32 >> 24 ) & 0xFF );
+  globalcache[1] = (uint8_t)( ( myuint32 >> 16 ) & 0xFF );
+  globalcache[2] = (uint8_t)( ( myuint32 >> 8  ) & 0xFF );
+  globalcache[3] = (uint8_t)( ( myuint32       ) & 0xFF );
+
+
+  // fetch the current luminance value
+  myuint16 = bh1750lowresoneshot();
+
+  // put this value into the cache
+  globalcache[4] = (uint8_t)( ( myuint16 >> 8  ) & 0xFF );
+  globalcache[5] = (uint8_t)( ( myuint16       ) & 0xFF );
+
+
+  // HTU2X temperature and humidity.
+  // the chip requires the order 1. temperature, 2. humidity.
+  myuint16 = htu2x_gettemperature();
+
+  // put this value into the cache
+  globalcache[6] = (uint8_t)( ( myuint16 >> 8  ) & 0xFF );
+  globalcache[7] = (uint8_t)( ( myuint16       ) & 0xFF );
+
+  // get the humidity
+  myuint16 = htu2x_gethumidity();
+
+  // put this value into the cache
+  globalcache[8] = (uint8_t)( ( myuint16 >> 8  ) & 0xFF );
+  globalcache[9] = (uint8_t)( ( myuint16       ) & 0xFF );
+
+
+  // fetch the current pressure
+  myuint32 = mybmp085.readPressure();
+
+  // put this value into the cache
+  globalcache[10] = (uint8_t)( ( myuint32 >> 24 ) & 0xFF );
+  globalcache[11] = (uint8_t)( ( myuint32 >> 16 ) & 0xFF );
+  globalcache[12] = (uint8_t)( ( myuint32 >> 8  ) & 0xFF );
+  globalcache[13] = (uint8_t)( ( myuint32       ) & 0xFF );
+
+  // add status bits.
+  // has the clock stopped?
+  globalcache[14] = clockHasStopped();
+  globalcache[15] = 0xA1;
+
+
+  return framwritesensordata( globalcache );
+
+};
+
+
+
+
+
+
+
+
 
 
 
@@ -141,16 +208,22 @@ void loop() {
   clearalarms();
 
   // now do the actual job...
-  doSensorReadAndStore();
+  if ( dosensorreadandstore() ) {
 
+    // if dosensorreadandstore returns true, the fram is full.
+    // deal with that here.
 
-  // now turn off the i2c bus
-  i2cbusoff();
+  }
+  else {
+    // now turn off the i2c bus
+    i2cbusoff();
 
+    // now write the LED pin low
+    digitalWrite( LED_RED , LOW );
 
-  // now write the LED pin low
-  digitalWrite( LED_RED , LOW );
+  }
 
+  
   // all done, return.
   return;
 
@@ -163,67 +236,6 @@ void loop() {
 
 
 
-
-
-
-/// @brief Read the sensor data, prepare it, then store it to fram.
-/// @return returns the datamemorycursor.
-uint16_t doSensorReadAndStore() {
-
-  // read sensors into ram buffer
-
-  // fetch the current time as an epoch from 00-01-01-00-00-00 ( year 2000, first of january , midnight.)
-  myuint32 = getTimeAndDate();
-
-  // put this value into the cache
-  globalcache[0] = (uint8_t)( ( myuint32 >> 24 ) & 0xFF );
-  globalcache[1] = (uint8_t)( ( myuint32 >> 16 ) & 0xFF );
-  globalcache[2] = (uint8_t)( ( myuint32 >> 8  ) & 0xFF );
-  globalcache[3] = (uint8_t)( ( myuint32       ) & 0xFF );
-
-
-  // fetch the current luminance value
-  myuint16 = bh1750lowresoneshot();
-
-  // put this value into the cache
-  globalcache[4] = (uint8_t)( ( myuint16 >> 8  ) & 0xFF );
-  globalcache[5] = (uint8_t)( ( myuint16       ) & 0xFF );
-
-
-  // HTU2X temperature and humidity.
-  // the chip requires the order 1. temperature, 2. humidity.
-  myuint16 = htu2x_gettemperature();
-
-  // put this value into the cache
-  globalcache[6] = (uint8_t)( ( myuint16 >> 8  ) & 0xFF );
-  globalcache[7] = (uint8_t)( ( myuint16       ) & 0xFF );
-
-  // get the humidity
-  myuint16 = htu2x_gethumidity();
-
-  // put this value into the cache
-  globalcache[8] = (uint8_t)( ( myuint16 >> 8  ) & 0xFF );
-  globalcache[9] = (uint8_t)( ( myuint16       ) & 0xFF );
-
-
-  // fetch the current pressure
-  myuint32 = mybmp085.readPressure();
-
-  // put this value into the cache
-  globalcache[10] = (uint8_t)( ( myuint32 >> 24 ) & 0xFF );
-  globalcache[11] = (uint8_t)( ( myuint32 >> 16 ) & 0xFF );
-  globalcache[12] = (uint8_t)( ( myuint32 >> 8  ) & 0xFF );
-  globalcache[13] = (uint8_t)( ( myuint32       ) & 0xFF );
-
-  // add status bits.
-  // has the clock stopped?
-  globalcache[14] = clockHasStopped();
-  globalcache[15] = 0xA1;
-
-
-  return framwritesensordata( globalcache );
-
-};
 
 
 

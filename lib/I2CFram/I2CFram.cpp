@@ -12,11 +12,11 @@
 uint8_t framworkmemory = I2CADDRESSFRAM0;
 uint8_t framdatamemory = I2CADDRESSFRAM1;
 
+#define DATAMEMORYMAXSIZE 32768
 
 
 
-
-uint16_t framwritesensordata( uint8_t *globalcache ) {
+uint8_t framwritesensordata( uint8_t *globalcache ) {
 
 
     // fetch datamemorycursor
@@ -52,9 +52,14 @@ uint16_t framwritesensordata( uint8_t *globalcache ) {
 
 
 
-    // return the datamemorycursor
-    return datamemorycursor;
-
+    // return true if full
+    if ( datamemorycursor == DATAMEMORYMAXSIZE ) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+    
 }
 
 
