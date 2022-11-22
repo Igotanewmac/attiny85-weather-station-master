@@ -208,20 +208,22 @@ void loop() {
   clearalarms();
 
   // now do the actual job...
-  if ( dosensorreadandstore() ) {
+  if ( !dosensorreadandstore() ) {
 
-    // if dosensorreadandstore returns true, the fram is full.
-    // deal with that here.
-
-  }
-  else {
     // now turn off the i2c bus
     i2cbusoff();
 
     // now write the LED pin low
     digitalWrite( LED_RED , LOW );
 
+    // fram store has returned false, so return for more data later.
+    return;
+
   }
+
+
+  // framdatastore is full, need to copy to eeproms.
+  
 
   
   // all done, return.
