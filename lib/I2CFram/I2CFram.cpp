@@ -16,7 +16,6 @@ uint8_t framdatamemory = I2CADDRESSFRAM1;
 
 
 
-
 // cursors
 #define FRAMCURSORFRAMFREE 0x0000
 #define FRAMCURSORFRAMUSED 0x0002
@@ -24,13 +23,17 @@ uint8_t framdatamemory = I2CADDRESSFRAM1;
 
 
 
+
+/// @brief Fetches a cursor from working fram.
+/// @param cursorid which cursor to retrive
+/// @return the 16 bit cursor data value
 uint16_t framfetchcursor( uint8_t cursorid ) {
 
-    wire.beginTransmission( cursorid );
-    wire.write( 0x00 );
-    wire.write( 0x00 );
+    wire.beginTransmission( framworkmemory );
+    wire.write( (uint8_t)( ( cursorid >> 8 ) & 0xFF ) );
+    wire.write( (uint8_t)( cursorid & 0xFF ) );
     wire.endTransmission();
-    wire.requestFrom( cursorid  , 2 );
+    wire.requestFrom( framworkmemory  , 2 );
     uint16_t cursor = 0;
     cursor += (uint16_t)(wire.read() << 8);
     cursor += (uint16_t)(wire.read());
@@ -44,12 +47,15 @@ uint16_t framfetchcursor( uint8_t cursorid ) {
 
 
 
+/// @brief Writes a cursor to working fram
+/// @param cursorid which cursor to write
+/// @param newcursorvalue the new value to write
 void framwritecursor( uint8_t cursorid , uint16_t newcursorvalue ) {
 
     // store data memory cursor
-    wire.beginTransmission( cursorid );
-    wire.write( 0x00 );
-    wire.write( 0x00 );
+    wire.beginTransmission( framworkmemory );
+    wire.write( (uint8_t)( ( cursorid >> 8 ) & 0xFF ) );
+    wire.write( (uint8_t)( cursorid & 0xFF ) );
     wire.write( (uint8_t)( ( ( newcursorvalue >> 8 ) & 0xFF ) ) );
     wire.write( (uint8_t)( ( newcursorvalue & 0xFF ) ) );
     wire.endTransmission();
