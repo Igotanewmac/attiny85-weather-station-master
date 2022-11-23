@@ -78,8 +78,7 @@ uint16_t myuint16 = 0;
 
 
 /// @brief Read the sensor data, prepare it, then store it to fram.
-/// @return returns true if fram full.
-uint8_t dosensorreadandstore() {
+void dosensorreadandstore() {
 
   // read sensors into ram buffer
 
@@ -132,7 +131,11 @@ uint8_t dosensorreadandstore() {
   globalcache[15] = 0xA1;
 
 
-  return framwritesensordata( globalcache );
+  // write to fram
+  framwritesensordata( globalcache );
+
+  // all done, now return
+  return;
 
 };
 
@@ -208,22 +211,16 @@ void loop() {
   clearalarms();
 
   // now do the actual job...
-  if ( !dosensorreadandstore() ) {
+  dosensorreadandstore();
 
-    // now turn off the i2c bus
-    i2cbusoff();
+  // now turn off the i2c bus
+  i2cbusoff();
 
-    // now write the LED pin low
-    digitalWrite( LED_RED , LOW );
-
-    // fram store has returned false, so return for more data later.
-    return;
-
-  }
+  // now write the LED pin low
+  digitalWrite( LED_RED , LOW );
 
 
-  // framdatastore is full, need to copy to eeproms.
-  
+
 
   
   // all done, return.

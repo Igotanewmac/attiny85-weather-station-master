@@ -20,7 +20,7 @@ uint8_t framdatamemory = I2CADDRESSFRAM1;
 #define FRAMCURSORFRAMFREE 0x0000
 #define FRAMCURSORFRAMUSED 0x0002
 #define FRAMCURSOREEPROMFREE 0x0004
-
+#define FRAMCURSOREEPROMBANK 0x0006
 
 
 
@@ -67,7 +67,9 @@ void framwritecursor( uint8_t cursorid , uint16_t newcursorvalue ) {
 
 
 
-uint8_t framwritesensordata( uint8_t *globalcache ) {
+/// @brief write the sensor data to the fram cache
+/// @param globalcache the global cache array
+void framwritesensordata( uint8_t *globalcache ) {
     
     // fetch datamemorycursor
     uint16_t datamemorycursor = 0;
@@ -88,16 +90,9 @@ uint8_t framwritesensordata( uint8_t *globalcache ) {
 
     framwritecursor( FRAMCURSORFRAMFREE , datamemorycursor );
 
+    // all done, return to caller
+    return;
 
-    // return true if full
-    if ( datamemorycursor == DATAMEMORYMAXSIZE ) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
-
-    
 }
 
 
