@@ -192,6 +192,43 @@ uint32_t getTimeAndDate() {
 
 
 
+
+
+
+void gettimeaddateraw( uint8_t *globalcache ) {
+
+    // set the register position to zero
+    tw.beginTransmission( DS1307ADDRESS );
+    tw.send( 0x00 );
+    tw.endTransmission();
+
+    // request seven bytes
+    tw.requestFrom( DS1307ADDRESS , 7 );
+    
+    // now put the response into storage, skipping day of week
+    globalcache[0] = tw.receive();
+    globalcache[1] = tw.receive();
+    globalcache[2] = tw.receive();
+    globalcache[3] = tw.receive();
+    globalcache[4] = tw.receive();
+    globalcache[5] = tw.receive();
+    
+    // now return to caller.
+    return;
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
 void setonesecondalarm() {
     // just quickly configure the clock while we are here...
     // set ALM1 registers to once a second.
