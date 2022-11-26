@@ -83,19 +83,16 @@ void bh1750lowresoneshotrawstart( uint8_t *globalcache ) {
 
 
 // low resolution oneshot.
-void bh1750lowresoneshotrawfinish( uint8_t *globalcache ) {
+void bh1750lowresoneshotrawend( uint8_t *globalcache ) {
 
     // get a 16 bit high resolution mode 1 oneshot reading
 
     globalcache[6] = 0;
 
-    while ( globalcache[6] == 0 ) {
     tw.requestFrom( BH1750ADDRESS , 2 );
     globalcache[6] = tw.receive();
     globalcache[7] = tw.receive();
-    }
-
-
+    
     return;
 
 }

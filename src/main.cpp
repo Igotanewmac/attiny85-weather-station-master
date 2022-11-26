@@ -160,7 +160,9 @@ void dosensorread() {
     // has luminance sensor started?
     if ( GETBIT01 == 0 ) {
       // start bh1750 luminance sensor up
+      bh1750lowresoneshotrawstart( globalcache );
       // set BIT01 to 1;
+      SETBIT01
     }
 
     // has luminance sensor been started?
@@ -168,7 +170,11 @@ void dosensorread() {
       // has luminance sensor finished?
       if ( GETBIT02 == 0 ) {
         // poll for sensor data
+        bh1750lowresoneshotrawend( globalcache );
         // if it has arrived, set BIT02 to 1;
+        if ( globalcache[6] != 0 ) {
+          SETBIT02
+        }
       }
     }
 
@@ -255,9 +261,7 @@ void dosensorread() {
   // BIT02 = luminance sensor has finished.
   // BIT06 = humidity sensor has finished.
   // BIT10 = pressure sensor has finished.
-
-
-
+  
   // all done, now return
   return;
 
