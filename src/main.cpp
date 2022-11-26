@@ -16,9 +16,10 @@
 #include "HTU2X.h"
 
 // bmp0855 pressure sensor
-#include "tinyBMP085.h"
-tinyBMP085 mybmp085;
+//#include "tinyBMP085.h"
+//tinyBMP085 mybmp085;
 
+#include "BMP085.h"
 
 // fram utility routines
 #include "I2CFram.h"
@@ -240,21 +241,27 @@ void dosensorread() {
       }
     }
 
-    
+
     
     // fetch the current temperature and pressure. 2x2 bytes
     // bmp085 requires order 1. temperature 2. pressure
     // has temperature measurement been started.
     if ( GETBIT07 == 0 ) {
       // start temperature sensing
+      bmp085gettemperaturerawstart();
       // set BIT07 to 1
+      SETBIT07
     }
 
     // if temperature sensing is not yet completed
     if ( GETBIT07 == 1 ) {
       if ( GETBIT08 == 0 ) {
         // check if any data is available
+        bmp085gettemperaturerawend( globalcache );
         // if so, set BIT08 to 1.
+        if ( ( globalcache[12] | globalcache[13] ) != 0 ) {
+          SETBIT08
+        }
       }
     }
 
@@ -263,7 +270,9 @@ void dosensorread() {
       // check we haven't already sent the command
       if ( GETBIT09 == 0 ) {
         // send the pressure start command
+        bmp085getpressurerawstart();
         // set BIT09 to 1.
+        SETBIT09
       }
     }
 
@@ -272,7 +281,11 @@ void dosensorread() {
       // if results have not yet been received
       if ( GETBIT10 == 0 ) {
         // if I have data available
+        bmp085getpressurerawend( globalcache );
         // set BIT10 to 1.
+        if ( ( globalcache[14] | globalcache[15] ) != 0 ) {
+          SETBIT10
+        }
       }
     }
 
@@ -288,7 +301,7 @@ void dosensorread() {
   // all done, now return
   return;
 
-};
+}
 
 
 
