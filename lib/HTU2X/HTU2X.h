@@ -19,6 +19,11 @@ void htu2xgettemperaturerawstart();
 void htu2xgettemperaturerawend( uint8_t *globalcache );
 
 
+void htu2xgethumidityrawstart();
+
+
+void htu2xgethumidityrawend( uint8_t *globalcache );
+
 
 
 //

@@ -147,6 +147,20 @@ void dosensorread() {
   // use a 16 bit variable as flags for scheduling
   uint16_t flags = 0;
 
+
+/*
+
+  globalcache map for sensor readings
+  00 - 05 Timestamp
+  06 - 07 luminance
+  08 - 09 HTU temp
+  10 - 11 HTU humidity
+  12 - 13 BMP temp
+  14 - 15 BMP pressure
+
+*/
+
+
   do {
       
     if ( GETBIT00 == 0 ) {
@@ -172,7 +186,7 @@ void dosensorread() {
         // poll for sensor data
         bh1750lowresoneshotrawend( globalcache );
         // if it has arrived, set BIT02 to 1;
-        if ( globalcache[6] != 0 ) {
+        if ( ( globalcache[6] | globalcache[7] ) != 0 ) {
           SETBIT02
         }
       }
@@ -196,7 +210,7 @@ void dosensorread() {
         // poll for data
         htu2xgettemperaturerawend( globalcache );
         // if it has arrived, set BIT04 to 1;
-        if ( globalcache[8] != 0 ) {
+        if ( ( globalcache[8] | globalcache[9] ) != 0 ) {
           SETBIT04
         }
       }
@@ -207,7 +221,9 @@ void dosensorread() {
       // if I have not send the start command previously
       if ( GETBIT05 == 0 ) {
         // send humidity start command
+        htu2xgethumidityrawstart();
         // set BIT05 to 1;
+        SETBIT05
       }
     }
 
@@ -216,12 +232,13 @@ void dosensorread() {
       // is the pressure reading finished?
       if ( GETBIT06 == 0 ) {
         // check if any data has arrived
+        htu2xgethumidityrawend( globalcache );
         // if so, set BIT06 to 1;
+        if ( ( globalcache[8] | globalcache[9] ) != 0 ) {
+          SETBIT06
+        }
       }
     }
-
-
-
 
     
     

@@ -127,7 +127,22 @@ uint16_t htu2x_gethumidity() {
 
 
 
+void htu2xgethumidityrawstart() {
+    // say hello to the chip
+    tw.beginTransmission( HTU2XADDRESS );
+    // send the measure command with no hold
+    tw.send( 0xF5 );
+    // all done
+    tw.endTransmission();
+}
 
+
+void htu2xgethumidityrawend( uint8_t *globalcache ) {
+    globalcache[8] = 0;
+    if ( tw.requestFrom( HTU2XADDRESS , 2 ) != 0 ) { return; }
+    globalcache[8] = tw.receive();
+    globalcache[9] = tw.receive();
+}
 
 
 
