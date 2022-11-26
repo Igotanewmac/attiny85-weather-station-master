@@ -161,6 +161,7 @@ void dosensorread() {
 
 */
 
+  digitalWrite( LED_YEL , HIGH );
 
   do {
       
@@ -291,13 +292,18 @@ void dosensorread() {
 
   }
   while ( ( GETBIT00 == 1 ) && ( GETBIT02 == 1 ) && ( GETBIT06 == 1 ) && ( GETBIT10 == 1 ) );
-  
   // process is complete when the following bits are set.
   // BIT00 = time retreival is complete.
   // BIT02 = luminance sensor has finished.
   // BIT06 = humidity sensor has finished.
   // BIT10 = pressure sensor has finished.
+  digitalWrite( LED_YEL , LOW );
   
+
+  // insert data storage code here ;)
+  framwritesensordata( globalcache );
+
+
   // all done, now return
   return;
 
@@ -383,10 +389,6 @@ void loop() {
   // now write the LED pin low
   digitalWrite( LED_RED , LOW );
 
-
-
-
-  
   // all done, return.
   return;
 
