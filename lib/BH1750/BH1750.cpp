@@ -57,7 +57,7 @@ uint16_t bh1750lowresoneshot() {
 
 
 
-void bh1750lowresoneshotrawstart( uint8_t *globalcache ) {
+void bh1750lowresoneshotrawstart() {
 
     // get a 16 bit high resolution mode 1 oneshot reading
 

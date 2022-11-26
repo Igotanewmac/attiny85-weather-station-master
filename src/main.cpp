@@ -160,7 +160,7 @@ void dosensorread() {
     // has luminance sensor started?
     if ( GETBIT01 == 0 ) {
       // start bh1750 luminance sensor up
-      bh1750lowresoneshotrawstart( globalcache );
+      bh1750lowresoneshotrawstart();
       // set BIT01 to 1;
       SETBIT01
     }
@@ -184,7 +184,9 @@ void dosensorread() {
     // has required order, temperature then humidity
     if ( GETBIT03 == 0 ) {
       // start temperature reading
+      htu2xgettemperaturerawstart();
       // set BIT03 to 1
+      SETBIT03
     }
 
     // if temperature reading has begun,
@@ -192,7 +194,11 @@ void dosensorread() {
       // has temperature reading finished?
       if ( GETBIT04 == 0 ) {
         // poll for data
+        htu2xgettemperaturerawend( globalcache );
         // if it has arrived, set BIT04 to 1;
+        if ( globalcache[8] != 0 ) {
+          SETBIT04
+        }
       }
     }
 

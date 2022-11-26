@@ -60,6 +60,30 @@ uint16_t htu2x_gettemperature() {
 
 
 
+void htu2xgettemperaturerawstart() {
+    // say hello to the chip
+    tw.beginTransmission( HTU2XADDRESS );
+    // send the measure command with no hold
+    tw.send( 0xF3 );
+    // all done
+    tw.endTransmission();
+}
+
+
+void htu2xgettemperaturerawend( uint8_t *globalcache ) {
+    globalcache[8] = 0;
+    if ( tw.requestFrom( HTU2XADDRESS , 2 ) != 0 ) { return; }
+    globalcache[8] = tw.receive();
+    globalcache[9] = tw.receive();
+}
+
+
+
+
+
+
+
+
 // humidity
 uint16_t htu2x_gethumidity() {
 
@@ -106,17 +130,6 @@ uint16_t htu2x_gethumidity() {
 
 
 
-
-
-void htu2xgetallraw( uint8_t *globalcache ) {
-
-
-
-
-
-
-    
-}
 
 
 
