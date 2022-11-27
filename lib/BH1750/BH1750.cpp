@@ -71,7 +71,8 @@ void bh1750lowresoneshotrawstart() {
     tw.endTransmission();
     // initiate sensing
     tw.beginTransmission( BH1750ADDRESS );
-    tw.send( 0b00100000 ); // initiate sensing
+    //tw.send( 0b00100001 ); // initiate high2 resolution sensing
+    tw.send( 0b00100011 ); // initiate low resolution sensing
     tw.endTransmission();
 
     // this can take up to 180ms

@@ -291,7 +291,7 @@ void dosensorread() {
     }
 
   }
-  while ( ( GETBIT00 == 1 ) && ( GETBIT02 == 1 ) && ( GETBIT06 == 1 ) && ( GETBIT10 == 1 ) );
+  while ( ( GETBIT00 == 0 ) || ( GETBIT02 == 0 ) || ( GETBIT06 == 0 ) || ( GETBIT10 == 0 ) );
   // process is complete when the following bits are set.
   // BIT00 = time retreival is complete.
   // BIT02 = luminance sensor has finished.
