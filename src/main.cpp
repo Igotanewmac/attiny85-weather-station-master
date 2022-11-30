@@ -32,11 +32,7 @@
 // Utility definition for TinyWireM
 #define wire TinyWireM
 
-// the actual bus id's
-// sensors are on bus 0x00
-#define I2CBUSIDSENSORS 0x00
-// eeprom storage is on bus 0x00
-#define I2CBUSIDSTORAGE 0x01
+
 
 // led pin(s)!
 // Pin of red output LED

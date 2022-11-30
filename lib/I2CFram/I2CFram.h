@@ -4,6 +4,10 @@
 
 #include <Arduino.h>
 
+
+
+
+
 // cursors
 #define FRAMCURSORFRAMFREE 0x0000
 #define FRAMCURSORFRAMUSED 0x0002

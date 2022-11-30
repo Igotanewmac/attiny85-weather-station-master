@@ -18,8 +18,8 @@ uint8_t framdatamemory = I2CADDRESSFRAM1;
 
 // cursors
 #define FRAMCURSORFRAMFREE 0x0000
-#define FRAMCURSORFRAMUSED 0x0002
-#define FRAMCURSOREEPROMFREE 0x0004
+#define FRAMCURSORFRAMSTRIPE 0x0002
+#define FRAMCURSOREEPROMSTRIPE 0x0004
 #define FRAMCURSOREEPROMBANK 0x0006
 
 
@@ -110,49 +110,6 @@ void framwritesensordata( uint8_t *globalcache ) {
 
 // fram to eeprom striping.
 
-/*
-
-framdosinglestripe() {
-
-    read in cursors
-
-    fetch one line of data from fram at USEDADDRESS
-
-    increment usedaddress
-
-    write to BANK at ADDRESS
-
-    increment bank
-
-    if BANK == 8 then
-        BANK = 0;
-        increment ADDRESS to next line
-
-    write out cursors
-
-}
-
-
-// each iteration of main loop....
-
-if FRAMFREE cursor is on the last 64 bytes on the chip...
-    
-    turn on striping.
-
-
-if FRAMUSED is equal to zero (i.e. has rolled over back to position zero)
-
-    turn off striping.
-
-
-
-
-
-*/
-
-
-
-
 
 // copy one stripe from fram to eeproms
 void framcopyonestripe() {
@@ -160,6 +117,7 @@ void framcopyonestripe() {
     // read in the stripe of 64 bytes from fram
 
     // 1. switch to fram bus
+    
 
     // 2. read FRAMCURSORFRAMUSED cursor
 
