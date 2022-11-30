@@ -2,26 +2,10 @@
 // i2c fram utility routines
 
 
-#include <TinyWireM.h>
-#define wire TinyWireM
-
-
-#define I2CADDRESSFRAM0 0x50
-#define I2CADDRESSFRAM1 0x51
+#include "globalheader.h"
 
 uint8_t framworkmemory = I2CADDRESSFRAM0;
 uint8_t framdatamemory = I2CADDRESSFRAM1;
-
-#define DATAMEMORYMAXSIZE 32768
-
-
-
-// cursors
-#define FRAMCURSORFRAMFREE 0x0000
-#define FRAMCURSORFRAMSTRIPE 0x0002
-#define FRAMCURSOREEPROMSTRIPE 0x0004
-#define FRAMCURSOREEPROMBANK 0x0006
-
 
 
 // bus switcher
