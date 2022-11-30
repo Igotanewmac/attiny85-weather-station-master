@@ -112,44 +112,87 @@ void framwritesensordata( uint8_t *globalcache ) {
 
 
 // copy one stripe from fram to eeproms
-void framcopyonestripe() {
+void framcopyonestripe( uint8_t *globalcache ) {
 
     // read in the stripe of 64 bytes from fram
 
     // 1. switch to fram bus
-    
+    i2cswitchbus( I2CBUSIDSENSORS );
 
     // 2. read FRAMCURSORFRAMUSED cursor
+    uint16_t cursorframstripe = framfetchcursor( FRAMCURSORFRAMSTRIPE );
 
     // 3. read 64 bytes from framworkingmemory
+    // say hello to chip
+    wire.beginTransmission( framdatamemory );
+    // send the address
+    wire.send( ( (uint8_t)( cursorframstripe >> 8 ) & 0xFF ) );
+    wire.send( (uint8_t)( cursorframstripe & 0xFF ) );
+    // say goodbye to the chip
+    wire.endTransmission();
+
+    // now request back 64 bytes of data
+    wire.requestFrom( framdatamemory , 64 );
+    // and receive said bytes
+    for ( uint8_t i = 0 ; i < 64 ; i++ ) {
+        globalcache[i] = wire.receive();
+    }
+    
+    // now globalcache has our data in it...
 
     // 4. increment FRAMCURSORFRAMUSED
+    cursorframstripe += 64;
 
     // 5. write back FRAMCURSORFRAMUSED
+    framwritecursor( FRAMCURSORFRAMSTRIPE , cursorframstripe );
 
+
+    // all done on reading the fram for now, move to eeprom writing operation.
 
 
     // write out a 64 byte stripe
 
     // 1. read FRAMCURSOREEPROMBANK
+    uint16_t cursoreeprombank = framfetchcursor( FRAMCURSOREEPROMBANK );
 
     // 2. read FRAMCURSOREEPROMSTRIPE
+    uint16_t cursoreepromstripe = framfetchcursor( FRAMCURSOREEPROMSTRIPE );
 
     // 3. switch to eeprom bus
+    i2cswitchbus( I2CBUSIDEEPROM );
 
     // 4. write 64 bytes of data to EEPROMBANK at EEPROMSTRIPE
+    // say hello to the chip
+    wire.beginTransmission( cursoreeprombank );
+    // write the address
+    wire.send( (uint8_t)( ( cursoreepromstripe >> 8 ) & 0xFF ) ); 
+    wire.send( (uint8_t)( cursoreepromstripe & 0xFF ) );
+    // now send in the 64 bytes of data to write.
+    for ( uint8_t i = 0 ; i < 64 ; i++ ) {
+        wire.send( globalcache[i] );
+    }
+    // now say goodbye to the chip
+    wire.endTransmission();
 
     // 5. increment EEPROMBANK
+    cursoreeprombank++;
 
     // 6. if EEMPROMBANK == 8 then EEPROMBANK == 0;
+    if ( cursoreeprombank == 8 ) { cursoreeprombank = 0; }
 
     // 7. if EEPROMBANK == 0 then EEPROMSTRIPE++;
+    if ( cursoreeprombank == 0 ) { cursoreepromstripe += 64; }
 
     // 8. switch to fram bus
+    i2cswitchbus( I2CBUSIDSENSORS );
 
     // 9. write EEPROMBANK cursor
+    framwritecursor( FRAMCURSOREEPROMBANK , cursoreeprombank );
 
     // 10. write EEPROMSTRIPE cursor
+    framwritecursor( FRAMCURSOREEPROMSTRIPE , cursoreepromstripe );
+
+    // all done!
 
 }
 
