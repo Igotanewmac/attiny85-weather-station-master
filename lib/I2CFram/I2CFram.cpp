@@ -24,6 +24,12 @@ uint8_t framdatamemory = I2CADDRESSFRAM1;
 
 
 
+// bus switcher
+#include "TCA9548.h"
+
+
+
+
 /// @brief Fetches a cursor from working fram.
 /// @param cursorid which cursor to retrive
 /// @return the 16 bit cursor data value
@@ -102,6 +108,92 @@ void framwritesensordata( uint8_t *globalcache ) {
 
 
 
+// fram to eeprom striping.
+
+/*
+
+framdosinglestripe() {
+
+    read in cursors
+
+    fetch one line of data from fram at USEDADDRESS
+
+    increment usedaddress
+
+    write to BANK at ADDRESS
+
+    increment bank
+
+    if BANK == 8 then
+        BANK = 0;
+        increment ADDRESS to next line
+
+    write out cursors
+
+}
+
+
+// each iteration of main loop....
+
+if FRAMFREE cursor is on the last 64 bytes on the chip...
+    
+    turn on striping.
+
+
+if FRAMUSED is equal to zero (i.e. has rolled over back to position zero)
+
+    turn off striping.
+
+
+
+
+
+*/
+
+
+
+
+
+// copy one stripe from fram to eeproms
+void framcopyonestripe() {
+
+    // read in the stripe of 64 bytes from fram
+
+    // 1. switch to fram bus
+
+    // 2. read FRAMCURSORFRAMUSED cursor
+
+    // 3. read 64 bytes from framworkingmemory
+
+    // 4. increment FRAMCURSORFRAMUSED
+
+    // 5. write back FRAMCURSORFRAMUSED
+
+
+
+    // write out a 64 byte stripe
+
+    // 1. read FRAMCURSOREEPROMBANK
+
+    // 2. read FRAMCURSOREEPROMSTRIPE
+
+    // 3. switch to eeprom bus
+
+    // 4. write 64 bytes of data to EEPROMBANK at EEPROMSTRIPE
+
+    // 5. increment EEPROMBANK
+
+    // 6. if EEMPROMBANK == 8 then EEPROMBANK == 0;
+
+    // 7. if EEPROMBANK == 0 then EEPROMSTRIPE++;
+
+    // 8. switch to fram bus
+
+    // 9. write EEPROMBANK cursor
+
+    // 10. write EEPROMSTRIPE cursor
+
+}
 
 
 

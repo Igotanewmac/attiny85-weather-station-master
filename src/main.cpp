@@ -58,7 +58,7 @@
 // globals
 
 // global 32 byte data ram cache
-uint8_t globalcache[32] = { 0 };
+uint8_t globalcache[64] = { 0 };
 
 // global 32bit variable
 uint32_t myuint32 = 0;
