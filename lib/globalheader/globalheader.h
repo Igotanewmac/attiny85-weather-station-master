@@ -69,6 +69,33 @@
 
 
 
+// ds3231
+#include <TinyWireM.h>
+
+#ifndef tw
+#define tw TinyWireM
+#endif
+
+
+#define DS1307ADDRESS 0x68
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

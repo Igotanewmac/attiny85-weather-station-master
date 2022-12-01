@@ -2,14 +2,7 @@
 
 // rtc functions
 
-#include <TinyWireM.h>
-
-#ifndef tw
-#define tw TinyWireM
-#endif
-
-
-#define DS1307ADDRESS 0x68
+#include "globalheader.h"
 
 
 // functions required are purely RTC functional

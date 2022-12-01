@@ -1,7 +1,6 @@
 // rtc clock functions header
 
-#include <Arduino.h>
-
+#include "globalheader.h"
 
 // check if clock has stopped
 uint8_t clockHasStopped();
