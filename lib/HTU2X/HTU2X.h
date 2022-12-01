@@ -1,8 +1,7 @@
 
 
 // htu2x humidity sensor
-
-#include <Arduino.h>
+#include "globalheader.h"
 
 // temperature
 uint16_t htu2x_gettemperature();

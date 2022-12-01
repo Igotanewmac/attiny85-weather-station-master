@@ -2,13 +2,7 @@
 // htu2x humidity sensor
 
 
-#include <TinyWireM.h>
-
-#ifndef tw
-#define tw TinyWireM
-#endif
-
-#define HTU2XADDRESS 0x40
+#include "globalheader.h"
 
 
 

@@ -84,8 +84,14 @@
 
 
 
+// HTU2X
+#include <TinyWireM.h>
 
+#ifndef tw
+#define tw TinyWireM
+#endif
 
+#define HTU2XADDRESS 0x40
 
 
 
