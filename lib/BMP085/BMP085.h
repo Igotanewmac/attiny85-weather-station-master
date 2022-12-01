@@ -2,8 +2,7 @@
 
 // bmp085 library
 
-#include <Arduino.h>
-
+#include "globalheader.h"
 
 void bmp085gettemperaturerawstart();
 void bmp085gettemperaturerawend( uint8_t *globalcache );

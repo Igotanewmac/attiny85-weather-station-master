@@ -1,13 +1,7 @@
 
 // bmp085 library
 
-#include <Arduino.h>
-
-#include <TinyWireM.h>
-#define wire TinyWireM
-
-
-#define BMP085ADDRESS 0x77
+#include "globalheader.h"
 
 
 

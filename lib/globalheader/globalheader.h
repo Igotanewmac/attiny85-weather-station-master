@@ -62,6 +62,9 @@
 
 
 
+// bmp085
+
+#define BMP085ADDRESS 0x77
 
 
 
