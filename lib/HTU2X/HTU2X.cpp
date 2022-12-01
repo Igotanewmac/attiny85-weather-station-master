@@ -15,18 +15,18 @@ uint16_t htu2x_gettemperature() {
     // return a two byte temperature
 
     // say hello to the chip
-    tw.beginTransmission( HTU2XADDRESS );
+    wire.beginTransmission( HTU2XADDRESS );
     // send the measure command with hold
-    tw.send( 0xe3 );
+    wire.send( 0xe3 );
     // all done
-    tw.endTransmission();
+    wire.endTransmission();
 
     // read back the temperature
-    tw.requestFrom( HTU2XADDRESS , 3 );
+    wire.requestFrom( HTU2XADDRESS , 3 );
     // msb
-    uint8_t tempmsb = tw.receive();
-    uint8_t templsb = tw.receive();
-    uint8_t tempcrc = tw.receive();
+    uint8_t tempmsb = wire.receive();
+    uint8_t templsb = wire.receive();
+    uint8_t tempcrc = wire.receive();
 
     tempcrc += 0;
     
@@ -56,19 +56,19 @@ uint16_t htu2x_gettemperature() {
 
 void htu2xgettemperaturerawstart() {
     // say hello to the chip
-    tw.beginTransmission( HTU2XADDRESS );
+    wire.beginTransmission( HTU2XADDRESS );
     // send the measure command with no hold
-    tw.send( 0xF3 );
+    wire.send( 0xF3 );
     // all done
-    tw.endTransmission();
+    wire.endTransmission();
 }
 
 
 void htu2xgettemperaturerawend( uint8_t *globalcache ) {
     globalcache[8] = 0;
-    if ( tw.requestFrom( HTU2XADDRESS , 2 ) != 0 ) { return; }
-    globalcache[8] = tw.receive();
-    globalcache[9] = tw.receive();
+    if ( wire.requestFrom( HTU2XADDRESS , 2 ) != 0 ) { return; }
+    globalcache[8] = wire.receive();
+    globalcache[9] = wire.receive();
 }
 
 
@@ -82,18 +82,18 @@ void htu2xgettemperaturerawend( uint8_t *globalcache ) {
 uint16_t htu2x_gethumidity() {
 
     // say hello to the chip
-    tw.beginTransmission( HTU2XADDRESS );
+    wire.beginTransmission( HTU2XADDRESS );
     // send the measure command with hold
-    tw.send( 0xE5 );
+    wire.send( 0xE5 );
     // all done
-    tw.endTransmission();
+    wire.endTransmission();
 
     // read back the temperature
-    tw.requestFrom( HTU2XADDRESS , 3 );
+    wire.requestFrom( HTU2XADDRESS , 3 );
     // msb
-    uint8_t tempmsb = tw.receive();
-    uint8_t templsb = tw.receive();
-    uint8_t tempcrc = tw.receive();
+    uint8_t tempmsb = wire.receive();
+    uint8_t templsb = wire.receive();
+    uint8_t tempcrc = wire.receive();
 
     tempcrc += 0;
     
@@ -123,19 +123,19 @@ uint16_t htu2x_gethumidity() {
 
 void htu2xgethumidityrawstart() {
     // say hello to the chip
-    tw.beginTransmission( HTU2XADDRESS );
+    wire.beginTransmission( HTU2XADDRESS );
     // send the measure command with no hold
-    tw.send( 0xF5 );
+    wire.send( 0xF5 );
     // all done
-    tw.endTransmission();
+    wire.endTransmission();
 }
 
 
 void htu2xgethumidityrawend( uint8_t *globalcache ) {
     globalcache[8] = 0;
-    if ( tw.requestFrom( HTU2XADDRESS , 2 ) != 0 ) { return; }
-    globalcache[8] = tw.receive();
-    globalcache[9] = tw.receive();
+    if ( wire.requestFrom( HTU2XADDRESS , 2 ) != 0 ) { return; }
+    globalcache[8] = wire.receive();
+    globalcache[9] = wire.receive();
 }
 
 

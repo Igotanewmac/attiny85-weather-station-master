@@ -25,9 +25,9 @@
 // bh1750
 // ds3231
 // htu2x
-#ifndef tw
-#define tw TinyWireM
-#endif
+//#ifndef tw
+//#define tw TinyWireM
+//#endif
 
 
 

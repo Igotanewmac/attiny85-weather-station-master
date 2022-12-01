@@ -26,14 +26,14 @@ uint8_t clockHasStopped() {
 
     // say hello to the clock
     // send a zero to set out ram position
-    tw.beginTransmission( DS1307ADDRESS );
-    tw.send( 0x00 );
-    tw.endTransmission();
+    wire.beginTransmission( DS1307ADDRESS );
+    wire.send( 0x00 );
+    wire.endTransmission();
     
     // request a byte
-    tw.requestFrom( DS1307ADDRESS , 1 );
+    wire.requestFrom( DS1307ADDRESS , 1 );
     
-    return (uint8_t)( ( tw.receive() & 0x80 ) >> 7 );
+    return (uint8_t)( ( wire.receive() & 0x80 ) >> 7 );
 
 }
 
@@ -50,14 +50,14 @@ uint32_t getTimeAndDate() {
     uint32_t epochtime = 0;
 
     // set the byte pointer to 0
-    tw.beginTransmission( DS1307ADDRESS );
-    tw.send( 0x00 );
-    tw.endTransmission();
+    wire.beginTransmission( DS1307ADDRESS );
+    wire.send( 0x00 );
+    wire.endTransmission();
 
     
     // fetch the seconds from position 0
-    tw.requestFrom( DS1307ADDRESS , 1 );
-    clockretval = tw.receive();
+    wire.requestFrom( DS1307ADDRESS , 1 );
+    clockretval = wire.receive();
     // seconds ones
     // retarray[0] = ( clockretval & 0b00001111 );
     // seconds tens
@@ -66,8 +66,8 @@ uint32_t getTimeAndDate() {
 
 
     // fetch the minutes from position 1
-    tw.requestFrom( DS1307ADDRESS , 1 );
-    clockretval = tw.receive();
+    wire.requestFrom( DS1307ADDRESS , 1 );
+    clockretval = wire.receive();
     // minutes ones
     // retarray[2] = ( clockretval & 0b00001111 );
     // minutes tens
@@ -77,8 +77,8 @@ uint32_t getTimeAndDate() {
 
 
     // fetch the hours from position 2
-    tw.requestFrom( DS1307ADDRESS  , 1 );
-    clockretval = tw.receive();
+    wire.requestFrom( DS1307ADDRESS  , 1 );
+    clockretval = wire.receive();
     // hours ones
     // retarray[4] = ( clockretval & 0b00001111 );
     // hours tens
@@ -88,14 +88,14 @@ uint32_t getTimeAndDate() {
 
 
     // ignore position 3 day of week
-    tw.requestFrom( DS1307ADDRESS , 1 );
-    clockretval = tw.receive();
+    wire.requestFrom( DS1307ADDRESS , 1 );
+    clockretval = wire.receive();
 
 
 
     // fetch the day from position 4
-    tw.requestFrom( DS1307ADDRESS , 1 );
-    clockretval = tw.receive();
+    wire.requestFrom( DS1307ADDRESS , 1 );
+    clockretval = wire.receive();
     // day ones
     // retarray[6] = ( clockretval & 0b00001111 );
     // day tens
@@ -105,8 +105,8 @@ uint32_t getTimeAndDate() {
 
 
     // fetch the month from position 5
-    tw.requestFrom( DS1307ADDRESS , 1 );
-    clockretval = tw.receive();
+    wire.requestFrom( DS1307ADDRESS , 1 );
+    clockretval = wire.receive();
     // month ones
     // retarray[8] = ( clockretval & 0b00001111 );
     // month tens
@@ -168,8 +168,8 @@ uint32_t getTimeAndDate() {
 
 
     // fetch the year from position 6
-    tw.requestFrom( DS1307ADDRESS , 1 );
-    clockretval = tw.receive();
+    wire.requestFrom( DS1307ADDRESS , 1 );
+    clockretval = wire.receive();
     // year ones
     // retarray[10] = ( clockretval & 0b00001111 );
     // year tens
@@ -191,20 +191,20 @@ uint32_t getTimeAndDate() {
 void gettimeaddateraw( uint8_t *globalcache ) {
 
     // set the register position to zero
-    tw.beginTransmission( DS1307ADDRESS );
-    tw.send( 0x00 );
-    tw.endTransmission();
+    wire.beginTransmission( DS1307ADDRESS );
+    wire.send( 0x00 );
+    wire.endTransmission();
 
     // request seven bytes
-    tw.requestFrom( DS1307ADDRESS , 7 );
+    wire.requestFrom( DS1307ADDRESS , 7 );
     
     // now put the response into storage, skipping day of week
-    globalcache[0] = tw.receive();
-    globalcache[1] = tw.receive();
-    globalcache[2] = tw.receive();
-    globalcache[3] = tw.receive();
-    globalcache[4] = tw.receive();
-    globalcache[5] = tw.receive();
+    globalcache[0] = wire.receive();
+    globalcache[1] = wire.receive();
+    globalcache[2] = wire.receive();
+    globalcache[3] = wire.receive();
+    globalcache[4] = wire.receive();
+    globalcache[5] = wire.receive();
     
     // now return to caller.
     return;
@@ -225,39 +225,39 @@ void gettimeaddateraw( uint8_t *globalcache ) {
 void setonesecondalarm() {
     // just quickly configure the clock while we are here...
     // set ALM1 registers to once a second.
-    tw.beginTransmission( DS1307ADDRESS );
-    tw.send( 0x07 );
-    tw.send( 0x00 );
-    tw.endTransmission();
-    tw.beginTransmission( DS1307ADDRESS );
-    tw.send( 0x08 );
-    tw.send( 0x00 );
-    tw.endTransmission();
-    tw.beginTransmission( DS1307ADDRESS );
-    tw.send( 0x09 );
-    tw.send( 0x00 );
-    tw.endTransmission();
-    tw.beginTransmission( DS1307ADDRESS );
-    tw.send( 0x0A );
-    tw.send( 0x00 );
-    tw.endTransmission();
+    wire.beginTransmission( DS1307ADDRESS );
+    wire.send( 0x07 );
+    wire.send( 0x00 );
+    wire.endTransmission();
+    wire.beginTransmission( DS1307ADDRESS );
+    wire.send( 0x08 );
+    wire.send( 0x00 );
+    wire.endTransmission();
+    wire.beginTransmission( DS1307ADDRESS );
+    wire.send( 0x09 );
+    wire.send( 0x00 );
+    wire.endTransmission();
+    wire.beginTransmission( DS1307ADDRESS );
+    wire.send( 0x0A );
+    wire.send( 0x00 );
+    wire.endTransmission();
 
     // read and writeback the control register byte
     uint8_t controlregister = 0;
-    tw.beginTransmission( DS1307ADDRESS );
-    tw.send( 0x0E );
-    tw.endTransmission();
-    tw.requestFrom( DS1307ADDRESS , 1 );
-    controlregister = tw.receive();
+    wire.beginTransmission( DS1307ADDRESS );
+    wire.send( 0x0E );
+    wire.endTransmission();
+    wire.requestFrom( DS1307ADDRESS , 1 );
+    controlregister = wire.receive();
 
     // now set the last three bits
     controlregister |= 0b00000111;
 
     // and now write it back.
-    tw.beginTransmission( DS1307ADDRESS );
-    tw.send( 0x0E );
-    tw.send( controlregister );
-    tw.end();
+    wire.beginTransmission( DS1307ADDRESS );
+    wire.send( 0x0E );
+    wire.send( controlregister );
+    wire.end();
 }
 
 
@@ -277,19 +277,19 @@ void clearalarms() {
   uint8_t controlbyte = 0;
 
   // read our control byte from the chip
-  tw.beginTransmission( DS1307ADDRESS );
-  tw.endTransmission();
-  tw.requestFrom( DS1307ADDRESS , 1 );
-  controlbyte = tw.receive();
+  wire.beginTransmission( DS1307ADDRESS );
+  wire.endTransmission();
+  wire.requestFrom( DS1307ADDRESS , 1 );
+  controlbyte = wire.receive();
 
   // update it
   controlbyte &= 0b11111100;
 
   // and now write it back...
-  tw.beginTransmission( DS1307ADDRESS );
-  tw.send( 0x0F );
-  tw.send( controlbyte );
-  tw.endTransmission();
+  wire.beginTransmission( DS1307ADDRESS );
+  wire.send( 0x0F );
+  wire.send( controlbyte );
+  wire.endTransmission();
 
 }
 
