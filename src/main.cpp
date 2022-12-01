@@ -1,10 +1,8 @@
 
 #include <Arduino.h>
 
+#include "mainheader.h"
 
-
-// wire master library for the USI hardware
-// #include <TinyWireM.h>
 
 // TCA9548 Library for i2c bus switching
 #include "TCA9548.h"
@@ -50,11 +48,6 @@ uint16_t myuint16 = 0;
 
 // function definitions
 
-
-
-
-
-
 /// @brief Read the sensor data, prepare it, then store it to fram.
 void dosensorread() {
 
@@ -65,12 +58,8 @@ void dosensorread() {
     globalcache[i] = 0;
   }
 
-
-
-
   // use a 16 bit variable as flags for scheduling
   uint16_t flags = 0;
-
 
 /*
 
