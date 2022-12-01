@@ -1,9 +1,9 @@
-
-
 // This is the global header included in all files!
-
-
 #include <Arduino.h>
+
+
+
+
 
 // led pin(s)!
 // Pin of red output LED
@@ -22,12 +22,6 @@
 //tca9548
 #define wire TinyWireM
 
-// bh1750
-// ds3231
-// htu2x
-//#ifndef tw
-//#define tw TinyWireM
-//#endif
 
 
 
