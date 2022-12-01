@@ -1,5 +1,5 @@
 
-#include "globalheader.h"
+#include <Arduino.h>
 
 
 
@@ -26,16 +26,6 @@
 
 // fram utility routines
 #include "I2CFram.h"
-
-
-
-
-
-
-
-
-
-
 
 
 
