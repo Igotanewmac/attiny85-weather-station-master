@@ -1,12 +1,10 @@
-#include <Arduino.h>
-
 
 #include "globalheader.h"
 
 
 
 // wire master library for the USI hardware
-#include <TinyWireM.h>
+// #include <TinyWireM.h>
 
 // TCA9548 Library for i2c bus switching
 #include "TCA9548.h"
