@@ -48,6 +48,27 @@
 
 
 
+// bh1750
+#include <Arduino.h>
+
+
+#include <TinyWireM.h>
+
+#ifndef tw
+#define tw TinyWireM
+#endif
+
+#define BH1750ADDRESS 0x23
+
+
+
+
+
+
+
+
+
+
 
 
 
