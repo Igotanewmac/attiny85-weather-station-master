@@ -1,15 +1,6 @@
 
 
-// pull in arduino definitions
-#include <Arduino.h>
-
-// now tinywire
-#include <TinyWireM.h>
-#define wire TinyWireM
-
-
-// the address of the i2c bus switcher
-#define I2CADDRESSBUSMASTER 0x70
+#include "globalheader.h"
 
 // bus switcher current bus id
 uint8_t currentbusid = 0x00;

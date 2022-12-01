@@ -1,15 +1,5 @@
 
-// include the arduino definitions
-#include <Arduino.h>
-
-
-
-// the actual bus id's
-// sensors are on bus 0x00
-#define I2CBUSIDSENSORS 0x00
-// eeprom storage is on bus 0x01
-#define I2CBUSIDEEPROM 0x01
-
+#include "globalheader.h"
 
 
 /// @brief Switch to a new i2c bus, from 0-7

@@ -95,6 +95,17 @@
 
 
 
+// tca9548
+// pull in arduino definitions
+#include <Arduino.h>
+
+// now tinywire
+#include <TinyWireM.h>
+#define wire TinyWireM
+
+
+// the address of the i2c bus switcher
+#define I2CADDRESSBUSMASTER 0x70
 
 
 
@@ -103,7 +114,18 @@
 
 
 
+// tca9548
 
+// include the arduino definitions
+#include <Arduino.h>
+
+
+
+// the actual bus id's
+// sensors are on bus 0x00
+#define I2CBUSIDSENSORS 0x00
+// eeprom storage is on bus 0x01
+#define I2CBUSIDEEPROM 0x01
 
 
 
